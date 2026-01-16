@@ -1,0 +1,11 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const apiKey = process.env.GEMINI_API_KEY;
+
+if (!apiKey && process.env.NODE_ENV === "production") {
+    console.warn("Missing GEMINI_API_KEY environment variable");
+}
+
+const genAI = new GoogleGenerativeAI(apiKey || "mock-key");
+
+export const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });

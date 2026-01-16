@@ -1,0 +1,25 @@
+# Global Lottery Platform Tasks
+
+- [x] Planning and Design <!-- id: 0 -->
+    - [x] Analyze requirements and validate tech stack <!-- id: 1 -->
+    - [x] Create Implementation Plan (`implementation_plan.md`) <!-- id: 2 -->
+    - [x] Design Database Schema (PostgreSQL) <!-- id: 3 -->
+- [x] UI/UX Design <!-- id: 17 -->
+    - [x] Create UI Flow & User Journey Document (`ui_ux_design.md`) <!-- id: 18 -->
+- [ ] Visual Mockups <!-- id: 19 -->
+    - [ ] Generate Homepage Mockup <!-- id: 20 -->
+    - [ ] Generate Mobile Detail View Mockup <!-- id: 21 -->
+    - [ ] Generate Dashboard Mockup <!-- id: 22 -->
+- [x] Project Setup <!-- id: 4 -->
+    - [x] Initialize Next.js Application with TailwindCSS <!-- id: 5 -->
+    - [x] Configure Database (Neon PostgreSQL) <!-- id: 6 -->
+    - [x] Set up Authentication (Auth.js / NextAuth) <!-- id: 7 -->
+- [/] Core Features Implementation <!-- id: 8 -->
+    - [/] Lottery Data Management (Schema & API) <!-- id: 9 -->
+    - [x] Public Lottery Listing Page <!-- id: 10 -->
+    - [x] User Subscription System <!-- id: 11 -->
+    - [x] Notification System (Email & Web Push) <!-- id: 12 -->
+    - [x] Integration with Gemini API <!-- id: 13 -->
+- [x] Optimization and Deployment <!-- id: 14 -->
+    - [x] SEO Optimization <!-- id: 15 -->
+    - [x] Deployment Setup (Vercel) <!-- id: 16 -->

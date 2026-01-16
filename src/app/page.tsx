@@ -1,65 +1,101 @@
-import Image from "next/image";
+import { LotteryCard } from "@/components/lottery-card";
+import { Button } from "@/components/ui/button";
+
+// Mock Data
+const lotteries = [
+  {
+    id: "1",
+    name: "Powerball",
+    country: "USA",
+    jackpot: "$145 Million",
+    nextDraw: "2026-01-18",
+    frequency: "Mon, Wed, Sat",
+    tags: ["High Jackpot", "Popular"]
+  },
+  {
+    id: "2",
+    name: "Mega Millions",
+    country: "USA",
+    jackpot: "$82 Million",
+    nextDraw: "2026-01-17",
+    frequency: "Tue, Fri",
+    tags: ["Global Favorite"]
+  },
+  {
+    id: "3",
+    name: "EuroMillions",
+    country: "Europe",
+    jackpot: "€64 Million",
+    nextDraw: "2026-01-17",
+    frequency: "Tue, Fri",
+    tags: ["Tax Free in UK"]
+  },
+  {
+    id: "4",
+    name: "EuroJackpot",
+    country: "Europe",
+    jackpot: "€120 Million",
+    nextDraw: "2026-01-17",
+    frequency: "Tue, Fri",
+    tags: ["Record High"]
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      {/* Navbar */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-16 items-center justify-between">
+          <div className="flex items-center gap-2 font-bold text-2xl">
+            <span className="text-primary">Global</span>Lotto
+          </div>
+          <nav className="flex gap-4">
+            <Button variant="ghost">How it works</Button>
+            <Button>Login</Button>
+          </nav>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      </header>
+
+      {/* Hero */}
+      <section className="py-24 px-4 text-center space-y-6 bg-gradient-to-b from-white to-zinc-100 dark:from-zinc-950 dark:to-zinc-900 border-b">
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 to-zinc-600 dark:from-white dark:to-zinc-400">
+          Win the World.
+        </h1>
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Track and subscribe to the biggest lotteries from across the globe. Never miss a draw again.
+        </p>
+        <div className="pt-4">
+           <Button size="lg" className="text-lg px-8 h-12 rounded-full">Explore Lotteries</Button>
+        </div>
+      </section>
+
+      {/* Lottery Grid */}
+      <main className="container py-16">
+        <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-bold tracking-tight">Trending Lotteries</h2>
+            <Button variant="link">View All &rarr;</Button>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {lotteries.map((lottery) => (
+            <LotteryCard
+              key={lottery.id}
+              name={lottery.name}
+              country={lottery.country}
+              jackpot={lottery.jackpot}
+              nextDraw={lottery.nextDraw}
+              frequency={lottery.frequency}
+              tags={lottery.tags}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ))}
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t py-12 bg-white dark:bg-zinc-900 text-center text-sm text-zinc-500">
+        <p>&copy; 2026 Global Lottery Platform. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
