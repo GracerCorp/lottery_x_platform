@@ -1,6 +1,10 @@
+import * as dotenv from "dotenv";
 import { db } from "./index";
 import { lotteries, results } from "./schema";
 import { calculateNextDraw, formatJackpot } from "@/lib/lottery";
+
+// Load environment variables from .env.local
+dotenv.config({ path: ".env.local" });
 
 async function seed() {
   console.log("🌱 Seeding database...");

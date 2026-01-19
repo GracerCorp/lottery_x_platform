@@ -160,13 +160,14 @@ export default async function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {lotteries.map((lottery) => (
+          {lotteries.map((lottery: any) => (
             <LotteryCard
               key={lottery.id}
               name={lottery.name}
               country={lottery.country}
               jackpot={lottery.jackpot}
               nextDraw={lottery.nextDraw}
+              logo={lottery.logo}
               tags={lottery.tags}
             />
           ))}
