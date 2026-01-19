@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -39,92 +41,85 @@ export function LotteryCard({
   };
 
   return (
-    <Card
-      className={`group hover:-translate-y-2 hover:shadow-2xl ${getGlowColor()} transition-all duration-500 border-zinc-800 bg-zinc-900/50 backdrop-blur-sm overflow-hidden relative`}
-    >
-      {/* Animated gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    <Card className="group hover:-translate-y-1 transition-all duration-300 border-zinc-800 bg-zinc-900/90 backdrop-blur-sm overflow-hidden">
+      <CardHeader className="pb-1">
+        <div className="flex items-start justify-between">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              {logo ? (
+                <img
+                  src={logo}
+                  alt={`${name} logo`}
+                  className="h-14 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              ) : (
+                <CardTitle className="text-lg font-bold text-white">
+                  {name}
+                </CardTitle>
+              )}
 
-      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2 relative z-10">
-        <div className="space-y-1">
-          <CardTitle className="text-xl font-bold flex items-center gap-2 text-white">
-            {name}
-            <Badge
-              variant="outline"
-              className="text-xs font-normal border-amber-500/50 text-amber-400"
-            >
-              {country}
-            </Badge>
-          </CardTitle>
-          <div className="text-sm text-muted-foreground flex items-center gap-1">
-            <Globe className="h-3 w-3" />
-            {currencyForCountry(country)}
-          </div>
-        </div>
-        <div className="bg-gradient-to-br from-amber-500/20 to-yellow-500/20 rounded-full p-2 shadow-lg shadow-amber-500/20 w-12 h-12 flex items-center justify-center">
-          {logo ? (
-            <img
-              src={logo}
-              alt={`${name} logo`}
-              className="w-8 h-8 object-contain"
-              onError={(e) => {
-                // Fallback to emoji if image fails to load
-                e.currentTarget.style.display = "none";
-                e.currentTarget.nextElementSibling?.classList.remove("hidden");
-              }}
-            />
-          ) : null}
-          <span className={`text-2xl ${logo ? "hidden" : ""}`}>💰</span>
-        </div>
-      </CardHeader>
-      <CardContent className="relative z-10">
-        <div className="space-y-4">
-          <div>
-            <p className="text-sm font-medium text-zinc-400">
-              Estimated Jackpot
-            </p>
-            <p className="text-4xl font-extrabold bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent animate-pulse">
-              {jackpot}
-            </p>
-          </div>
-
-          {/* Countdown Timer */}
-          <div className="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700/50">
-            <p className="text-xs text-zinc-400 mb-2">Next Draw In:</p>
-            <CountdownTimer targetDate={nextDraw} className="justify-center" />
-          </div>
-
-          {/* Hot Numbers - FOMO Element */}
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-red-400" />
-            <span className="text-xs text-zinc-400">Hot Numbers:</span>
-            <div className="flex gap-1">
-              {hotNumbers.slice(0, 5).map((num) => (
-                <span
-                  key={num}
-                  className="text-xs font-mono bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded border border-red-500/50"
-                >
-                  {num}
-                </span>
-              ))}
+              
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-zinc-400 mt-4">
+              <Badge
+                variant="outline"
+                className="text-xs border-amber-500/50 text-amber-400 bg-amber-500/10"
+              >
+                {country}
+              </Badge>
+              <span>{name}</span>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            {tags?.map((tag) => (
-              <Badge
-                key={tag}
-                variant="secondary"
-                className="text-xs bg-zinc-800 border-zinc-700 text-zinc-300"
+          {/* Country Flag */}
+          <div className="relative w-14 h-14 flex-shrink-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-yellow-600/20 rounded-full blur-lg" />
+            <div className="relative w-full h-full bg-gradient-to-br from-amber-500/10 to-yellow-600/10 rounded-full flex items-center justify-center border border-amber-500/20">
+              <span className="text-3xl">{getCountryFlag(country)}</span>
+            </div>
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-4 pb-4">
+        {/* Jackpot */}
+        <div>
+          <p className="text-xs text-zinc-500 mb-1">Estimated Jackpot</p>
+          <p className="text-4xl font-black bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-300 bg-clip-text text-transparent">
+            {jackpot}
+          </p>
+        </div>
+
+        {/* Countdown Timer */}
+        <div className="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700/50">
+          <p className="text-xs text-zinc-400 mb-2.5">Next Draw In:</p>
+          <CountdownTimer targetDate={nextDraw} className="justify-start" />
+        </div>
+
+        {/* Hot Numbers */}
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp className="h-3.5 w-3.5 text-red-400" />
+            <span className="text-xs text-zinc-400">Hot Numbers:</span>
+          </div>
+          <div className="flex gap-1.5">
+            {hotNumbers.map((num) => (
+              <span
+                key={num}
+                className="text-xs font-mono bg-red-500/20 text-red-400 px-2 py-1 rounded border border-red-500/50 min-w-[32px] text-center"
               >
-                {tag}
-              </Badge>
+                {num}
+              </span>
             ))}
           </div>
         </div>
       </CardContent>
-      <CardFooter className="pt-2 relative z-10">
-        <SubscribeDialog lotteryName={name} />
+
+      <CardFooter className="pt-0 pb-4 ">
+        <SubscribeDialog lotteryName={name}/>
       </CardFooter>
     </Card>
   );
@@ -135,4 +130,11 @@ function currencyForCountry(country: string) {
   if (country === "Europe") return "EUR";
   if (country === "UK") return "GBP";
   return "Global";
+}
+
+function getCountryFlag(country: string): string {
+  if (country === "USA") return "🇺🇸";
+  if (country === "Europe") return "🇪🇺";
+  if (country === "UK") return "🇬🇧";
+  return "🌍";
 }

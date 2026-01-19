@@ -24,7 +24,7 @@ export function SubscribeDialog({ lotteryName }: { lotteryName: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="w-full gap-2 group">
+        <Button className="w-full border border-zinc-700/50 gap-2 group">
            <Bell className="h-4 w-4 group-hover:shake" />
            Subscribe
         </Button>

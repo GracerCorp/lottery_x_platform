@@ -56,9 +56,6 @@ export default async function Home() {
             <Button variant="ghost" className="text-zinc-300 hover:text-white">
               How it works
             </Button>
-            <Button className="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-zinc-950 font-semibold">
-              Login
-            </Button>
           </nav>
         </div>
       </header>
@@ -109,7 +106,7 @@ export default async function Home() {
             <Button
               size="lg"
               variant="outline"
-              className="text-lg px-10 h-14 rounded-full border-2 border-zinc-700 hover:border-amber-500 hover:text-amber-400"
+              className="text-lg text-amber-800 px-10 h-14 rounded-full border-2 border-zinc-700 hover:border-amber-500 hover:text-amber-400"
             >
               How It Works
             </Button>
