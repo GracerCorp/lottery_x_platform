@@ -6,7 +6,6 @@ import { eq, desc } from "drizzle-orm";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const country = searchParams.get("country");
     const limit = parseInt(searchParams.get("limit") || "10");
 
     // Build base query

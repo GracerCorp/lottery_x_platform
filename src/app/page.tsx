@@ -195,24 +195,18 @@ export default async function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {lotteries.map((lottery: any) => (
+          {lotteries.map((lottery) => (
             <LotteryCard
               key={lottery.id}
               name={lottery.name}
               country={lottery.country}
               jackpot={lottery.jackpot}
               nextDraw={lottery.nextDraw}
-              logo={lottery.logo}
-              tags={lottery.tags}
+              logo={lottery.logo || undefined}
             />
           ))}
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-zinc-800 py-12 bg-zinc-950 text-center text-sm text-zinc-500">
-        <p>&copy; 2026 Global Lottery Platform. All rights reserved.</p>
-      </footer>
     </div>
   );
 }
