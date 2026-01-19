@@ -1,72 +1,58 @@
-# Global Lottery Platform - Implementation Plan
+# UI/UX Overhaul & FOMO Implementation Plan
 
-## Project Goal
-Build a global lottery website that displays lottery results from around the world, allows user management (social/mobile login), supports lottery subscriptions, sends push notifications/emails, and is highly SEO optimized.
+## Goal Description
+Transform the "Lottery X Platform" into a high-energy, premium experience ("Win the World") that instills FOMO (Fear Of Missing Out) and excitement. The design will follow the guidelines in `docs/ui_ux_design.md`: dark mode preference, vibrant accents, animated tickers, and "glow" effects.
 
 ## User Review Required
 > [!IMPORTANT]
-> **Tech Stack Validation & Adjustments**
-> I have reviewed your proposed stack. Here are my recommendations:
-> 1.  **Databases**: You proposed both **PostgreSQL [Neon]** and **MongoDB [Atlas]**.
->     *   *Recommendation*: Stick to **PostgreSQL** (Neon) as the primary database. It supports JSONB for flexible data (like varying lottery result formats) and relational data (users, subscriptions) excellently. Using two databases adds unnecessary complexity for this scale initially.
-> 2.  **Deployment**: You mentioned **Docker [Vercel]**.
->     *   *Clarification*: Vercel is a serverless platform optimized for Next.js. You typically deploy the Next.js app directly to Vercel, not a Docker container. Docker is great for local development or if you were hosting on a VPS (like DigitalOcean/AWS EC2).
->     *   *Recommendation*: Deploy directly to **Vercel** for the frontend/API.
-> 3.  **Cronjobs**: You mentioned **VPS cronjob**.
->     *   *Recommendation*: Vercel has built-in **[Vercel Cron Jobs](https://vercel.com/docs/cron-jobs)**. This avoids paying for and managing a separate VPS just for crons. Alternatively, simple robust cron services (like Inngest or specialized cron providers) work well with serverless.
-> 4.  **Auth**: For login (Social + Mobile), I recommend **Auth.js (NextAuth)**. It handles standard OAuth providers easily. For "Mobile Number" login, we might need a specific provider (like Twilio Verify integration) or a service like Firebase Auth or Supabase Auth which handles SMS well.
-> 5.  **Gemini API**: Confirmed. Useful for parsing unstructured lottery results from the web or generating SEO-friendly descriptions.
-
-### Final Recommended Stack
--   **Frontend/Backend**: Next.js 15 (App Router), TailwindCSS, Shadcn/UI (for premium look).
--   **Database**: PostgreSQL (Neon) + Drizzle ORM or Prisma.
--   **Auth**: Auth.js (NextAuth) or Clerk (great for social + phone).
--   **AI**: Gemini API (Data parsing, content generation).
--   **Notifications**:
-    -   Email: Postmark (Excellent).
-    -   Push: Web Push API (PWA).
--   **Hosting**: Vercel.
--   **Scheduled Tasks**: Vercel Cron or Inngest.
+> The design will heavily shift towards a **Dark Mode** first aesthetic. Light mode might be secondary or removed if a purely "Premium Dark" feel is desired as per the design doc (implied by "Deep Zinc/Slate backgrounds").
 
 ## Proposed Changes
 
-### Phase 1: Foundation & Setup
-#### [NEW] [Project Structure]
-- Initialize Next.js with TypeScript and TailwindCSS.
-- Setup Shadcn/UI for components.
-- Configure ESLint/Prettier.
+### Components Layer [`src/components`]
+#### [NEW] `src/components/countdown-timer.tsx`
+- A reusable component that takes a target date and animates the time remaining (Days : Hours : Mins : Secs).
+- Uses monospace font for numbers.
 
-#### [NEW] [Database Setup]
-- Initialize Neon PostgreSQL.
-- Setup Drizzle ORM (lighter/faster than Prisma) or Prisma.
-- Define Schema: `Users`, `Lotteries`, `Results`, `Subscriptions`.
+#### [NEW] `src/components/ticker-tape.tsx`
+- A scrolling marquee component (using CSS animations).
+- Used for "Next Big Draw" and "Recent Winners".
 
-### Phase 2: Core Features
-#### [NEW] [User Management]
-- Implement Login/Register pages.
-- Integrate Auth.js/Clerk.
+#### [MODIFY] `src/components/lottery-card.tsx`
+- **Visuals**: Add hover lift effect (`hover:-translate-y-2`), colored glow shadows based on lottery type (Gold/Blue).
+- **Features**: Add the `CountdownTimer` and a "Subscribe" bell icon button.
+- **Data**: Display "Hot/Cold" numbers (mocked for now).
 
-#### [NEW] [Lottery Data & Display]
-- Create "Lotteries" model.
-- Build Homepage (Global list).
-- Build Single Lottery Page (SEO focused).
+### Page Layer [`src/app`]
+#### [MODIFY] `src/app/page.tsx`
+- **Hero Section**:
+    - Replace basic white/gray gradient with deep `zinc-950` and energetic gradients.
+    - Add "Win the World" typography with gradient text.
+    - Insert `TickerTape` at the top or below nav.
+- **Grid Section**:
+    - Update background to dark tint.
+    - Improve section headers.
+- **Footer**:
+    - Dark mode styling.
 
-### Phase 3: "Smart" Features
-#### [NEW] [Gemini Integration]
-- Create scripts/functions to fetch raw lottery data and use Gemini to parse/normalize it into our DB format.
-
-#### [NEW] [Notifications]
-- Implement Subscription logic.
-- Setup Postmark SDK.
-- Setup Service Worker for Web Push.
+#### [MODIFY] `src/app/globals.css`
+- Ensure `@custom-variant dark` is working or manually enforce dark classes if we stick to one theme.
+- Add specific keyframes for `ticker` animation if not present in `tw-animate-css`.
 
 ## Verification Plan
 
 ### Automated Tests
-- Unit tests for data parsing logic (critical for lottery numbers).
-- E2E tests for User Login flow.
+- None currently exist for UI visuals.
+- Run `npm run dev` and navigate to `http://localhost:3000`.
 
 ### Manual Verification
-- Testing responsiveness on Mobile.
-- Verifying Push Notifications work on supported browsers (Chrome/Safari/Edge).
-- Validating SEO tags (OpenGraph, JSON-LD schemas).
+1.  **Visual Check**:
+    -   Does the Hero section look premiums? (Dark bg, gradient text).
+    -   Do the tickers scroll smoothly?
+    -   Do cards lift on hover?
+2.  **Functional Check**:
+    -   Does the Countdown timer tick down?
+    -   Does the "Subscribe" button click (console log is fine for now)?
+3.  **Responsive Check**:
+    -   Ensure tickers works on mobile.
+    -   Grid layout adjusts correctly.

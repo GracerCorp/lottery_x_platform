@@ -123,3 +123,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes ticker {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-ticker {
+    animation: ticker 30s linear infinite;
+  }
+
+  .animate-ticker-slow {
+    animation: ticker 45s linear infinite;
+  }
+
+  .animate-ticker-fast {
+    animation: ticker 20s linear infinite;
+  }
+}
