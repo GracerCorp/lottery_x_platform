@@ -19,7 +19,7 @@ async function seed() {
     const lotteryData = [
       {
         name: "Powerball",
-        slug: "powerball-usa",
+        slug: "powerball",
         country: "USA",
         region: "North America",
         frequency: "Mon, Wed, Sat",
@@ -31,7 +31,7 @@ async function seed() {
       },
       {
         name: "Mega Millions",
-        slug: "mega-millions-usa",
+        slug: "mega-millions",
         country: "USA",
         region: "North America",
         frequency: "Tue, Fri",

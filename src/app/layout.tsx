@@ -51,6 +51,8 @@ import Script from "next/script";
 import { Footer } from "@/components/footer";
 import { CookieConsentComponent } from "@/components/cookie-consent";
 
+import { Navbar } from "@/components/navbar";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -66,6 +68,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-white min-h-screen flex flex-col`}
       >
+        <Navbar />
         <main className="flex-grow">{children}</main>
         <Footer />
         <CookieConsentComponent />

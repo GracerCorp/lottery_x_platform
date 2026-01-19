@@ -1,5 +1,14 @@
-import { pgTable, text, timestamp, boolean, jsonb, uuid, integer, primaryKey } from "drizzle-orm/pg-core";
-import { type AdapterAccount } from "next-auth/adapters"
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  jsonb,
+  uuid,
+  integer,
+  primaryKey,
+} from "drizzle-orm/pg-core";
+import { type AdapterAccount } from "next-auth/adapters";
 
 export const users = pgTable("user", {
   id: text("id")
@@ -34,8 +43,8 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
-)
+  }),
+);
 
 export const sessions = pgTable("session", {
   sessionToken: text("sessionToken").primaryKey(),
@@ -43,7 +52,7 @@ export const sessions = pgTable("session", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
-})
+});
 
 export const verificationTokens = pgTable(
   "verificationToken",
@@ -56,8 +65,8 @@ export const verificationTokens = pgTable(
     compositePk: primaryKey({
       columns: [verificationToken.identifier, verificationToken.token],
     }),
-  })
-)
+  }),
+);
 
 // App specific tables
 
@@ -78,7 +87,9 @@ export const lotteries = pgTable("lottery", {
 
 export const results = pgTable("result", {
   id: uuid("id").defaultRandom().primaryKey(),
-  lotteryId: uuid("lotteryId").references(() => lotteries.id).notNull(),
+  lotteryId: uuid("lotteryId")
+    .references(() => lotteries.id)
+    .notNull(),
   drawDate: timestamp("drawDate", { mode: "date" }).notNull(),
   numbers: jsonb("numbers").notNull(), // e.g. { main: [1, 2, 3], bonus: [4] }
   jackpot: text("jackpot"), // e.g. "$100 Million"
@@ -89,9 +100,22 @@ export const results = pgTable("result", {
 
 export const subscriptions = pgTable("subscription", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: text("userId").references(() => users.id, { onDelete: "cascade" }).notNull(),
-  lotteryId: uuid("lotteryId").references(() => lotteries.id).notNull(),
+  userId: text("userId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  lotteryId: uuid("lotteryId")
+    .references(() => lotteries.id)
+    .notNull(),
   notifyEmail: boolean("notifyEmail").default(true),
   notifyPush: boolean("notifyPush").default(false),
+  createdAt: timestamp("createdAt").defaultNow(),
+});
+
+export const pushSubscriptions = pgTable("push_subscription", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  endpoint: text("endpoint").notNull().unique(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  userId: text("userId").references(() => users.id, { onDelete: "set null" }),
   createdAt: timestamp("createdAt").defaultNow(),
 });

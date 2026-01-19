@@ -80,23 +80,6 @@ export default async function Home() {
   );
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50">
-      {/* Navbar */}
-      <header className="sticky top-0 z-50 w-full border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl supports-[backdrop-filter]:bg-zinc-950/60">
-        <div className="container mx-auto max-w-7xl px-4 flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-2xl">
-            <Globe2 className="h-8 w-8 text-amber-500" />
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
-              Global
-            </span>
-            <span className="text-zinc-100">Lotto</span>
-          </div>
-          <nav className="flex gap-4">
-            <Button variant="ghost" className="text-zinc-300 hover:text-white">
-              How it works
-            </Button>
-          </nav>
-        </div>
-      </header>
 
       {/* Live Ticker */}
       <TickerTape items={nextDrawTicker} variant="primary" speed="normal" />

@@ -1,15 +1,28 @@
 import { NextResponse } from "next/server";
 import webpush from "web-push";
 
-webpush.setVapidDetails(
-  "mailto:test@example.com",
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!,
-);
+// Initialized lazily under handler
 
 export async function POST(request: Request) {
   try {
     const { subscription, title, body } = await request.json();
+
+    if (
+      !process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ||
+      !process.env.VAPID_PRIVATE_KEY
+    ) {
+      console.warn("VAPID keys not set");
+      return NextResponse.json(
+        { error: "VAPID configuration missing" },
+        { status: 500 },
+      );
+    }
+
+    webpush.setVapidDetails(
+      "mailto:test@example.com",
+      process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+      process.env.VAPID_PRIVATE_KEY,
+    );
 
     if (!subscription || !title) {
       return NextResponse.json(
