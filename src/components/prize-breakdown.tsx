@@ -68,7 +68,7 @@ export function PrizeBreakdown({
                 {tier.prize}
               </TableCell>
               <TableCell className="text-right text-zinc-300 font-mono">
-                {tier.winners.toLocaleString()}
+                {(tier.winners || 0).toLocaleString()}
               </TableCell>
             </TableRow>
           ))}

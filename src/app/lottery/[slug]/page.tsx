@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Bell, Calendar, Trophy, History, Info } from "lucide-react";
 import { CountdownTimer } from "@/components/countdown-timer";
 import { PrizeBreakdown, WinnerTier } from "@/components/prize-breakdown";
+import { formatJackpot } from "@/lib/lottery";
 
 interface LotteryNumbers {
   main: number[];
@@ -192,7 +193,20 @@ export default async function LotteryDetailPage({
                   {/* Prize Breakdown Component */}
                   <div className="mt-10">
                     <PrizeBreakdown
-                      winners={latestResult.winners as unknown as WinnerTier[]}
+                      winners={(latestResult.winners as any[]).map(
+                        (w: any) => ({
+                          tier: w.tier.toString(),
+                          match: w.match || `Tier ${w.tier}`,
+                          prize:
+                            typeof w.prize === "number"
+                              ? formatJackpot(
+                                  w.prize,
+                                  latestResult.currency || "USD",
+                                )
+                              : w.prize,
+                          winners: w.count ?? w.winners ?? 0,
+                        }),
+                      )}
                       currency={latestResult.currency || "USD"}
                     />
                   </div>
