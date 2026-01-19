@@ -2,16 +2,54 @@ import { LotteryCard } from "@/components/lottery-card";
 import { Button } from "@/components/ui/button";
 import { TickerTape } from "@/components/ticker-tape";
 import { Sparkles, TrendingUp, Trophy, Globe2 } from "lucide-react";
+import { db } from "@/db";
+import { lotteries, results } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
 
-// Fetch lotteries from API
+// Fetch lotteries directly from database
 async function getLotteries() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const res = await fetch(`${baseUrl}/api/lotteries?limit=4`, {
-      cache: "no-store",
-    });
-    if (!res.ok) throw new Error("Failed to fetch");
-    return res.json();
+    const data = await db
+      .select({
+        id: lotteries.id,
+        name: lotteries.name,
+        slug: lotteries.slug,
+        country: lotteries.country,
+        region: lotteries.region,
+        frequency: lotteries.frequency,
+        logo: lotteries.logo,
+        description: lotteries.description,
+        officialLink: lotteries.officialLink,
+      })
+      .from(lotteries)
+      .where(eq(lotteries.isActive, true))
+      .limit(4);
+
+    // Fetch latest result for each lottery to get current jackpot
+    const lotteriesWithJackpots = await Promise.all(
+      data.map(async (lottery) => {
+        const [latestResult] = await db
+          .select({
+            jackpot: results.jackpot,
+            drawDate: results.drawDate,
+            currency: results.currency,
+          })
+          .from(results)
+          .where(eq(results.lotteryId, lottery.id))
+          .orderBy(desc(results.drawDate))
+          .limit(1);
+
+        return {
+          ...lottery,
+          jackpot: latestResult?.jackpot || "$0",
+          nextDraw:
+            latestResult?.drawDate?.toISOString() || new Date().toISOString(),
+          currency: latestResult?.currency || "USD",
+        };
+      }),
+    );
+
+    return lotteriesWithJackpots;
   } catch (error) {
     console.error("Error fetching lotteries:", error);
     return [];
