@@ -63,8 +63,22 @@ const recentWinnersTicker = [
   { id: "4", text: "Chen L. won", highlight: "¥12M", icon: "🌟" },
 ];
 
+import { HeroSection } from "@/components/home/hero-section";
+import { parseJackpotValue } from "@/lib/lottery";
+
+// ... (imports remain)
+
 export default async function Home() {
   const lotteries = await getLotteries();
+
+  // Find top lottery with jackpot > 100M
+  const featuredLottery =
+    lotteries
+      .filter((l) => parseJackpotValue(l.jackpot) >= 100_000_000)
+      .sort(
+        (a, b) => parseJackpotValue(b.jackpot) - parseJackpotValue(a.jackpot),
+      )[0] || null;
+
   const nextDrawTicker = lotteries.map(
     (lottery: {
       id: string;
@@ -80,76 +94,11 @@ export default async function Home() {
   );
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50">
-
       {/* Live Ticker */}
       <TickerTape items={nextDrawTicker} variant="primary" speed="normal" />
 
       {/* Hero */}
-      <section className="relative py-32 px-4 md:px-8 text-center overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-900/20 via-transparent to-transparent" />
-
-        {/* Floating orbs */}
-        <div className="absolute top-20 left-1/4 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-
-        <div className="relative z-10 space-y-8 max-w-5xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="h-6 w-6 text-amber-400 animate-pulse" />
-            <span className="text-sm font-semibold text-amber-400 uppercase tracking-wider">
-              Global Jackpots Await
-            </span>
-            <Sparkles className="h-6 w-6 text-amber-400 animate-pulse" />
-          </div>
-
-          <h1 className="text-6xl md:text-8xl font-black tracking-tight">
-            <span className="bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 bg-clip-text text-transparent animate-gradient">
-              Win the World.
-            </span>
-          </h1>
-
-          <p className="text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto leading-relaxed">
-            Track the biggest lottery jackpots from{" "}
-            <span className="text-amber-400 font-semibold">
-              USA, Europe & Asia
-            </span>{" "}
-            in real-time. Never miss a life-changing draw again.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-            <Button
-              size="lg"
-              className="text-lg px-10 h-14 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-zinc-950 font-bold shadow-2xl shadow-amber-500/50"
-            >
-              Explore Lotteries
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-lg text-amber-800 px-10 h-14 rounded-full border-2 border-zinc-700 hover:border-amber-500 hover:text-amber-400"
-            >
-              How It Works
-            </Button>
-          </div>
-
-          {/* Trust signals */}
-          <div className="flex items-center justify-center gap-8 pt-8 text-sm text-zinc-500">
-            <div className="flex items-center gap-2">
-              <Trophy className="h-5 w-5 text-amber-500" />
-              <span>Verified Results</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Globe2 className="h-5 w-5 text-blue-500" />
-              <span>50+ Countries</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-500" />
-              <span>Real-time Updates</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSection featuredLottery={featuredLottery} allLotteries={lotteries} />
 
       {/* Recent Winners Ticker */}
       <TickerTape

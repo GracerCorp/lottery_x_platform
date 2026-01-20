@@ -55,10 +55,35 @@ export function calculateNextDraw(
   }
 
   const nextDraw = new Date(baseDate);
-  nextDraw.setDate(nextDraw.getDate() + daysUntilNext);
+  nextDraw.setDate(baseDate.getDate() + daysUntilNext);
   nextDraw.setHours(20, 0, 0, 0); // Default to 8 PM
 
   return nextDraw;
+}
+
+export function parseJackpotValue(jackpotStr: string | null): number {
+  if (!jackpotStr) return 0;
+
+  // Remove currency symbols and commas
+  const cleanStr = jackpotStr
+    .replace(/[$,€£¥,]/g, "")
+    .trim()
+    .toLowerCase();
+
+  let multiplier = 1;
+  if (cleanStr.includes("billion") || cleanStr.includes("b")) {
+    multiplier = 1_000_000_000;
+  } else if (cleanStr.includes("million") || cleanStr.includes("m")) {
+    multiplier = 1_000_000;
+  } else if (cleanStr.includes("k")) {
+    multiplier = 1_000;
+  }
+
+  // Extract the numeric part
+  const match = cleanStr.match(/[\d.]+/);
+  if (!match) return 0;
+
+  return parseFloat(match[0]) * multiplier;
 }
 
 export function generateHotNumbers(
